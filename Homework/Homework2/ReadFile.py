@@ -20,12 +20,14 @@ def Read(filename):
     line1=file.readline()
     label,value=line1.split()
     time=float(value)*u.Myr
+    print('Time= '+str(time))
     
     #read the second line of the file to find the total number of particles
     #described.
     line2=file.readline()
     label,value=line2.split()
     total=float(value)
+    print('Number of objects= '+str(total))
     
     #close the file
     file.close()
