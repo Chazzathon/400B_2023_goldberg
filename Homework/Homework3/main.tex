@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{astr400bHW3}
+\author{cgoldberg9121 }
+\date{January 2023}
+
+\begin{document}
+
+\begin{table}
+    \centering
+    \hspace*{-4.12cm}
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+         \textbf{Galaxy Name} & \textbf{Halo Mass ($10^{12}$ $M_{\odot}$)}& \textbf{Disk Mass ($10^{12}$ $M_{\odot}$)} & \textbf{Bulge Mass ($10^{12}$ $M_{\odot}$)} & \textbf{Total ($10^{12}$ $M_{\odot}$)} & \textbf{$f_{bar}$}  \\ \hline
+         Milky Way & 1.975 & 0.075 & 0.010 & 2.060 & 4.126\\
+         M31 & 1.921 & 0.12 & 0.019 & 2.060 & 6.748\\
+         M33 & 1.921 & 0.12 & -& 2.041 & 5.879\\
+         Total &5.817 & 0.315 & 0.029&6.161&5.584\\
+         \hline
+    \end{tabular}
+    \caption{Mass distribution of galaxies, where $f_{bar}$ is the percentage of baryonic matter in each galaxy. M33 does not have a bulge. (Made in LaTeX)}
+    \label{tab:my_label}
+\end{table}
+
+\section{Questions}
+
+\subsection{}
+
+The Milky Way and M31 have the same mass in this simulation. Both galaxy masses are dominated by their halos.
+
+\subsection{}
+
+The Milky Way has a lower stellar mass, so I would expect M31 to be brighter because it has more stars (1.6 times the stellar mass of the MW).
+
+\subsection{}
+
+The ratio between the dark matter mas of M31 and the Milky Way is 0.97, so they have near identical dark matter masses. It is odd that M31 has a higher stellar mass and a lower dark matter mass, but compared to the total mass of the galaxy the stellar mass is nearly negligible, so it is unsurprising that the stellar mass seems to be uncoupled from the dark matter mass.
+
+\subsection{}
+
+The total baryon fraction of the local group is ~6\%. This is less than half that of the baryonic fraction of the universe, which is 16\%. I do not know where the missing baryonic matter is. Perhaps there is additional baryonic matter in between the galaxies that is not accounted for in this simulation.
+
+\end{document}
