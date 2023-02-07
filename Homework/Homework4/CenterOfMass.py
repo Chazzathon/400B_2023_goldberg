@@ -36,7 +36,7 @@ class CenterOfMass:
         '''
      
         # read data in the given file using Read
-        self.data, self.yime, self.total = Read(filename)                                                                                             
+        self.data, self.time, self.total = Read(filename)                                                                                             
 
         #create an array to store indexes of particles of desired Ptype                                
         self.index = np.where(self.data['type'] == ptype)
@@ -123,8 +123,8 @@ class CenterOfMass:
         # and the first guess at COM position
         # write your own code below
         x_new = self.x-x_COM
-        y_new = self.y-x_COM
-        z_new = self.z-x_COM
+        y_new = self.y-y_COM
+        z_new = self.z-z_COM
         r_new = np.sqrt(x_new**2 + y_new**2 + z_new**2)
 
         # find the max 3D distance of all particles from the guessed COM                                               
@@ -142,12 +142,13 @@ class CenterOfMass:
         while (change > delta):
             # select all particles within the reduced radius (starting from original x,y,z, m)
             # write your own code below (hints, use np.where)
-            index2 = np.where(np.sqrt((self.data['x']-x_COM)**2 + (self.data['y']-y_COM)**2 + (self.data['z']-z_COM)**2) < r_max)
-            x2 = self.data['x'][index2]
-            y2 = self.data['y'][index2]
-            z2 = self.data['z'][index2]
-            m2 = self.data['m'][index2]
-
+            index2 = np.where(r_new < r_max)
+            
+            x2 = self.x[index2]
+            y2 = self.y[index2]
+            z2 = self.z[index2]
+            m2 = self.m[index2]
+      
             # Refined COM position:                                                                                    
             # compute the center of mass position using                                                                
             # the particles in the reduced radius
@@ -191,7 +192,7 @@ class CenterOfMass:
         # and then return the COM positon vector
         # write your own code below
         
-        p_COM=np.round(p_COM*u.kpc,2)
+        p_COM=np.round(p_COM,2)*u.kpc
         
         return p_COM
         
@@ -218,25 +219,25 @@ class CenterOfMass:
         
         # the max distance from the center that we will use to determine 
         #the center of mass velocity                   
-        rv_max = 15.0
+        rv_max = 15.0*u.kpc
 
         # determine the position of all particles relative to the center of mass position (x_COM, y_COM, z_COM)
         # write your own code below
         xV = self.x*u.kpc-x_COM
         yV = self.y*u.kpc-y_COM
         zV = self.z*u.kpc-z_COM
-        rV = np.sqrt(xV**2 + yV**2 + zV**2)*u.kpc
+        rV = np.sqrt(xV**2 + yV**2 + zV**2)
         
         # determine the index for those particles within the max radius
         # write your own code below
-        indexV = np.where(np.sqrt((self.data['x']-x_COM.value)**2) + (self.data['y']-y_COM.value)**2 + (self.data['z']-z_COM.value)**2 < rv_max)
+        indexV = np.where(rV < rv_max)
         
         # determine the velocity and mass of those particles within the mas radius
         # write your own code below
-        vx_new = self.data['vx'][indexV]
-        vy_new = self.data['vy'][indexV]
-        vz_new = self.data['vz'][indexV]
-        m_new =  self.data['m'][indexV]
+        vx_new = self.vx[indexV]
+        vy_new = self.vy[indexV]
+        vz_new = self.vz[indexV]
+        m_new =  self.m[indexV]
         
         # compute the center of mass velocity using those particles
         # write your own code below
