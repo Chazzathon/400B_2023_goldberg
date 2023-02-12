@@ -256,7 +256,7 @@ if __name__ == '__main__' :
     hernquistp=[]
     
     #specify scale factor of MW
-    a_MW=30
+    a_MW=18
     
     #find the enclosed mass according to hernquist profile at each radius
     for radius in r:
@@ -336,7 +336,7 @@ if __name__ == '__main__' :
     hernquistp=[]
     
     #specify scale factor of M33
-    a_M33=8
+    a_M33=10
     
     #find the enclosed mass according to hernquist profile at each radius
     for radius in r:
@@ -383,7 +383,7 @@ if __name__ == '__main__' :
     ax.plot(r,hernquistv,linestyle='dashed',label='Hernquist Profile',color='red')
     
     #create legend and label graph axes
-    legend=ax.legend()
+    legend=ax.legend(loc=8)
     ax.set(title='MW Velocity Profiles', xlabel='Radius (kpc)', ylabel='Log(Velocity ($ms^{-1}$))')
     
     '''M31 Rotation Curves'''
@@ -412,7 +412,7 @@ if __name__ == '__main__' :
     ax.plot(r,hernquistv,linestyle='dashed',label='Hernquist Profile',color='red')
     
     #create legend and label graph axes
-    legend=ax.legend()
+    legend=ax.legend(loc=8)
     ax.set(title='M31 Velocity Profiles', xlabel='Radius (kpc)', ylabel='Log(Velocity ($ms^{-1}$))')
     
     '''M33 Rotation Curves'''
