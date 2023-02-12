@@ -55,20 +55,23 @@ class MassProfile:
         COM=CenterOfMass(self.filename,ptype)
         COM_p=COM.COM_P(.1)
         
+        index1=np.where(self.data['type']==ptype)
+        
         x_COM=COM_p[0]
         y_COM=COM_p[1]
         z_COM=COM_p[2]
         
-        x_new = self.x-x_COM
-        y_new = self.y-y_COM
-        z_new = self.z-z_COM
+        x_new = self.x[index1]-x_COM
+        y_new = self.y[index1]-y_COM
+        z_new = self.z[index1]-z_COM
+        m_new=self.m[index1]
         r_new = np.sqrt(x_new**2 + y_new**2 + z_new**2)
         
         mass_list=[]
         
         for radius in r:
             index2 = np.where(r_new < radius)
-            m2 = self.m[index2]
+            m2 = m_new[index2]
             mass_list.append(sum(m2))
             
         mass_array=np.array(mass_list)*u.M_sun*10**10
@@ -133,11 +136,12 @@ if __name__ == '__main__' :
     MW_halop=MW.MassEnclosed(1,r)
     MW_diskp=MW.MassEnclosed(2,r)
     MW_bulgep=MW.MassEnclosed(3,r)
+    MW_totalp=MW.MassEnclosedTotal(r)
     
     Mhalo_MW=max(MW_halop)/u.Msun
     
     hernquistp=[]
-    a_MW=8
+    a_MW=20
     for radius in r:
         MW_Hernq=MW.HernquistMass(radius/u.kpc,a_MW,Mhalo_MW)
         hernquistp.append(MW_Hernq)
@@ -147,6 +151,7 @@ if __name__ == '__main__' :
     ax.semilogy(r,MW_halop,label='Halo Profile')
     ax.semilogy(r,MW_diskp,label='Disk Profile')
     ax.semilogy(r,MW_bulgep,label='Bulge Profile')
+    ax.semilogy(r,MW_totalp,label='Total Profile')
     ax.semilogy(r,hernquistp,linestyle='dashed',label='Hernquist Profile')
     
     legend=ax.legend()
@@ -154,13 +159,14 @@ if __name__ == '__main__' :
     
     print('The best scale length, a, for the MW is '+str(a_MW*u.kpc))
    
-    
+
     '''M31 Mass Profile'''
     
     M31=MassProfile('M31',0)
     M31_halop=M31.MassEnclosed(1,r)
     M31_diskp=M31.MassEnclosed(2,r)
     M31_bulgep=M31.MassEnclosed(3,r)
+    M31_totalp=MW.MassEnclosedTotal(r)
     
     Mhalo_M31=max(M31_halop)/u.Msun
     
@@ -175,6 +181,7 @@ if __name__ == '__main__' :
     ax.semilogy(r,M31_halop,label='Halo Profile')
     ax.semilogy(r,M31_diskp,label='Disk Profile')
     ax.semilogy(r,M31_bulgep,label='Bulge Profile')
+    ax.semilogy(r,M31_totalp,label='Total Profile')
     ax.semilogy(r,hernquistp,linestyle='dashed',label='Hernquist Profile')
     
     legend=ax.legend()
@@ -186,6 +193,7 @@ if __name__ == '__main__' :
     M33=MassProfile('M33',0)
     M33_halop=M33.MassEnclosed(1,r)
     M33_diskp=M33.MassEnclosed(2,r)
+    M33_totalp=MW.MassEnclosedTotal(r)
     
     Mhalo_M33=max(M33_diskp)/u.Msun
     
@@ -199,6 +207,7 @@ if __name__ == '__main__' :
     fig,ax=plt.subplots(figsize=(10,10))
     ax.semilogy(r,M33_halop,label='Halo Profile')
     ax.semilogy(r,M33_diskp,label='Disk Profile')
+    ax.semilogy(r,M33_totalp,label='Total Profile')
     ax.semilogy(r,hernquistp,linestyle='dashed',label='Hernquist Profile',color='red')
     
     legend=ax.legend()
@@ -225,6 +234,7 @@ if __name__ == '__main__' :
     ax.scatter(r,MW_halov,label='Halo Profile')
     ax.scatter(r,MW_diskv,label='Disk Profile')
     ax.scatter(r,MW_bulgev,label='Bulge Profile')
+    ax.scatter(r,MW_totv,label='Total Profile')
     ax.plot(r,hernquistv,linestyle='dashed',label='Hernquist Profile',color='red')
     
     legend=ax.legend()
@@ -248,6 +258,7 @@ if __name__ == '__main__' :
     ax.scatter(r,M31_halov,label='Halo Profile')
     ax.scatter(r,M31_diskv,label='Disk Profile')
     ax.scatter(r,M31_bulgev,label='Bulge Profile')
+    ax.scatter(r,M31_totv,label='Total Profile')
     ax.plot(r,hernquistv,linestyle='dashed',label='Hernquist Profile',color='red')
     
     legend=ax.legend()
@@ -269,6 +280,7 @@ if __name__ == '__main__' :
     fig,ax=plt.subplots(figsize=(10,10))
     ax.scatter(r,M33_halov,label='Halo Profile')
     ax.scatter(r,M33_diskv,label='Disk Profile')
+    ax.scatter(r,M33_totv,label='Total Profile')
     ax.plot(r,hernquistv,linestyle='dashed',label='Hernquist Profile',color='red')
     
     legend=ax.legend()
