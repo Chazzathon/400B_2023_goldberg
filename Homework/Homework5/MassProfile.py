@@ -103,9 +103,13 @@ class MassProfile:
          
         #turn the mass list into a numpy array
         mass_array=np.array(mass_list)*u.M_sun*10**10
+        
+        halo_index=np.where(self.data['type']==1)
+        m_halo=sum(self.m[halo_index])*u.M_sun*10**10
+        m_halo=m_halo/u.Msun
             
         
-        return mass_array
+        return mass_array, m_halo
         
     def MassEnclosedTotal(self,r):
         ''''
@@ -123,14 +127,14 @@ class MassProfile:
         '''
         
         #find the arrays of halo and disk mass enclosed by radii defined by r
-        halo_mass=self.MassEnclosed(1,r)
-        disk_mass=self.MassEnclosed(2,r)
+        halo_mass=self.MassEnclosed(1,r)[0]
+        disk_mass=self.MassEnclosed(2,r)[0]
         
         #m33 does not have a bulge, so if the specified galaxy is not M33 the
         #mass array for the bulge is found. All 3 arrays are then added
         #together to find the total mass enclosed by radii defined by r.
         if self.gname != 'M33':
-            bulge_mass=self.MassEnclosed(3,r)
+            bulge_mass=self.MassEnclosed(3,r)[0]
             total_mass=halo_mass+disk_mass+bulge_mass
           
         #if the galaxy is M33, the total mass is just the halo plus disk mass
@@ -186,7 +190,7 @@ class MassProfile:
          
         #get the enclosed mass at specified radii due to objects of the desired
         #type
-        mass_array=self.MassEnclosed(ptype,r)
+        mass_array=self.MassEnclosed(ptype,r)[0]
         
         #calculate the velocity of each object using the orbital velocity equation
         #v=sqrt(GM/r)
@@ -243,20 +247,21 @@ if __name__ == '__main__' :
     MW=MassProfile('MW',0)
     
     #find the mass profiles of MW halo, disk and bulge
-    MW_halop=MW.MassEnclosed(1,r)
-    MW_diskp=MW.MassEnclosed(2,r)
-    MW_bulgep=MW.MassEnclosed(3,r)
+    MW_halop,Mhalo_MW=MW.MassEnclosed(1,r)
+    MW_diskp=MW.MassEnclosed(2,r)[0]
+    MW_bulgep=MW.MassEnclosed(3,r)[0]
     MW_totalp=MW.MassEnclosedTotal(r)
     
     #find the mass of the halo
-    Mhalo_MW=max(MW_halop)/u.Msun
+    #Mhalo_MW=sum(MW_halop)/u.Msun
+    
     
     #create empty list to store enclosed mass values derived from the hernquist
     #profile
     hernquistp=[]
     
     #specify scale factor of MW
-    a_MW=18
+    a_MW=63
     
     #find the enclosed mass according to hernquist profile at each radius
     for radius in r:
@@ -269,7 +274,7 @@ if __name__ == '__main__' :
     ax.semilogy(r,MW_diskp,label='Disk Profile')
     ax.semilogy(r,MW_bulgep,label='Bulge Profile')
     ax.semilogy(r,MW_totalp,label='Total Profile')
-    ax.semilogy(r,hernquistp,linestyle='dashed',label='Hernquist Profile')
+    ax.semilogy(r,hernquistp,linestyle='dashed',label='Hernquist Profile',color='red')
     
     #create legend and label graph axes
     legend=ax.legend()
@@ -284,20 +289,19 @@ if __name__ == '__main__' :
     M31=MassProfile('M31',0)
     
     #find the mass profiles of M31 halo, disk and bulge
-    M31_halop=M31.MassEnclosed(1,r)
-    M31_diskp=M31.MassEnclosed(2,r)
-    M31_bulgep=M31.MassEnclosed(3,r)
+    M31_halop,Mhalo_M31=M31.MassEnclosed(1,r)
+    M31_diskp=M31.MassEnclosed(2,r)[0]
+    M31_bulgep=M31.MassEnclosed(3,r)[0]
     M31_totalp=MW.MassEnclosedTotal(r)
     
-    #find the mass of the halo
-    Mhalo_M31=max(M31_halop)/u.Msun
+    index='1'
     
     #create empty list to store enclosed mass values derived from the hernquist
     #profile
     hernquistp=[]
     
     #specify scale factor of M31
-    a_M31=15
+    a_M31=61
     
     #find the enclosed mass according to hernquist profile at each radius
     for radius in r:
@@ -310,7 +314,7 @@ if __name__ == '__main__' :
     ax.semilogy(r,M31_diskp,label='Disk Profile')
     ax.semilogy(r,M31_bulgep,label='Bulge Profile')
     ax.semilogy(r,M31_totalp,label='Total Profile')
-    ax.semilogy(r,hernquistp,linestyle='dashed',label='Hernquist Profile')
+    ax.semilogy(r,hernquistp,linestyle='dashed',label='Hernquist Profile',color='red')
     
     #create legend and label graph axes
     legend=ax.legend()
@@ -324,19 +328,17 @@ if __name__ == '__main__' :
     M33=MassProfile('M33',0)
     
     #find the mass profiles of M31 halo and disk
-    M33_halop=M33.MassEnclosed(1,r)
-    M33_diskp=M33.MassEnclosed(2,r)
+    M33_halop,Mhalo_M33=M33.MassEnclosed(1,r)
+    M33_diskp=M33.MassEnclosed(2,r)[0]
     M33_totalp=MW.MassEnclosedTotal(r)
-    
-    #find the mass of the halo
-    Mhalo_M33=max(M33_halop)/u.Msun
+
     
     #create empty list to store enclosed mass values derived from the hernquist
     #profile
     hernquistp=[]
     
     #specify scale factor of M33
-    a_M33=10
+    a_M33=27
     
     #find the enclosed mass according to hernquist profile at each radius
     for radius in r:
