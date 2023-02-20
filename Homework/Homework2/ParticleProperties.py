@@ -20,7 +20,7 @@ from pathlib import Path
 #Returns: distance in light years, velocity in km/s, and mass in Msun
 def ParticleInfo(filename,particle_type,particle_num):
     
-    data=ReadFile.Read(filename)#get data array by calling the Read function 
+    data,time,total=ReadFile.Read(filename)#get data array by calling the Read function 
                                 #from ReadFile
     
     index=np.where(data['type']==particle_type)#find the indices where the
@@ -49,8 +49,8 @@ def ParticleInfo(filename,particle_type,particle_num):
     #find the magnitude of the distance by taking the square root of the sum of
     #squares of the x, y, and z locations. Then define the units as kpc and
     #convert to light years using astropy units. Round to 3 decimal places.
-    distance=(np.sqrt(x**2+y**2+z**2))*u.kpc
-    distance=np.around(distance.to(u.lyr),3)
+    distance_kpc=(np.sqrt(x**2+y**2+z**2))*u.kpc
+    distance_ly=np.around(distance_kpc.to(u.lyr),3)
     
     #find the magnitude of the velocity by taking the square root of the sum of
     #squares of the x, y, and z locations. Then define the units as km/s using
@@ -63,7 +63,7 @@ def ParticleInfo(filename,particle_type,particle_num):
     mass=mass*(u.M_sun*10**10)
     mass=np.around(mass.to(u.M_sun),3)
     
-    return distance, velocity, mass
+    return distance_kpc, distance_ly, velocity, mass
 
 def main():
     
@@ -79,10 +79,11 @@ def main():
     particle_num-=1
     
     #call ParticleInfo function and retrieve the parameters it returns
-    distance, velocity, mass=ParticleInfo(filename,particle_type,particle_num)
+    distance_kpc, distance_ly, velocity, mass=ParticleInfo(filename,particle_type,particle_num)
     
     #print returned values from ParticleInfo function
-    print('\nDistance= '+str(distance))
+    print('\nDistance= '+str(distance_ly))
+    print('Distance= '+str(np.around(distance_kpc,3)))
     print('Velocity= '+str(velocity))
     print('Mass= '+str(mass))
     
