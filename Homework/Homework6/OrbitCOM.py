@@ -161,8 +161,8 @@ def vector_dif(vector1,vector2):
 # Determine the magnitude of the relative position and velocities 
 
 # of MW and M31
-MW_M31_dr=vector_dif([MW_data['x'],MW_data['y'],MW_data['z']],[M31_data['x'],M31_data['y'],M31_data['z']])
-MW_M31_dv=vector_dif([MW_data['vx'],MW_data['vy'],MW_data['vz']],[M31_data['vx'],M31_data['vy'],M31_data['vz']])
+MW_M31_dr=vector_dif([MW_data['x'],MW_data['y'],MW_data['z']],[M31_data['x']-MW_data['x'],M31_data['y']-MW_data['y'],M31_data['z']-MW_data['z']])
+MW_M31_dv=vector_dif([MW_data['vx'],MW_data['vy'],MW_data['vz']],[M31_data['vx']-MW_data['vx'],M31_data['vy']-MW_data['vy'],M31_data['vz']-MW_data['vz']])
 
 # of M33 and M31
 M33_M31_dr=vector_dif([M33_data['x'],M33_data['y'],M33_data['z']],[M31_data['x'],M31_data['y'],M31_data['z']])
