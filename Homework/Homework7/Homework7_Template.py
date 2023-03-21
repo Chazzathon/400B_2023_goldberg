@@ -221,40 +221,65 @@ class M33AnalyticOrbit:
 
 if __name__ == '__main__' :
     
+    #set the font size for all figures
     plt.rcParams.update({'font.size': 18})
     
+    #set the filename for thr file that will hold the M33 positions
     filename='M33_integrated_pos.txt'
     
+    #initialize class that will do the orbital integration
     number=M33AnalyticOrbit(filename).OrbitIntegration(t0=0,dt=0.1,tmax=10)
-    
+   
+    #load M33 integration data into array
     data=np.genfromtxt(filename,dtype=None,names=True,skip_header=0)
     
+    #create M33 distance, velocity, and time arrays
     r=np.sqrt(data['x']**2+data['y']**2+data['z']**2)
     v=np.sqrt(data['vx']**2+data['vy']**2+data['vz']**2)
     t=data['t']
     
     '''import data from galaxy merger'''
     
+    #open M31 data fron the galaxy merger simulation
     M31_file=file=open('OrbitM31.txt','r')
     M31_data=np.genfromtxt(M31_file,dtype=None,names=True,skip_header=0)
 
+    #open M33 data fron the galaxy merger simulation
     M33_file=file=open('OrbitM33.txt','r')
     M33_data=np.genfromtxt(M33_file,dtype=None,names=True,skip_header=0)
     
+    #find the relative position and velocity of M33 and M31 from the merger simulation
     merge_pos=vector_dif([M33_data['x'],M33_data['y'],M33_data['z']],[M31_data['x'],M31_data['y'],M31_data['z']])
     merge_vel=vector_dif([M33_data['vx'],M33_data['vy'],M33_data['vz']],[M31_data['vx'],M31_data['vy'],M31_data['vz']])
     merge_t=M33_data['t']
     
+    #set up plot
     fig,ax=plt.subplots(1,2,figsize=(20,10))
-
+    
+    #plot M33 and M31 relative position as a function of time for the integration
+    #done by this script and for the merger simulation
     ax[0].set(title='M33 and M31 Relative Distance', xlabel='Time (Gyr)', ylabel='Distance (kpc)')
     ax[0].plot(t[:len(t)-1],r[:len(r)-1],label='Integration')
     ax[0].plot(merge_t,merge_pos,label='Simulation')
     ax[0].legend()
 
-
+    #plot M33 and M31 relative velocity as a function of time for the integration
+    #done by this script and for the merger simulation
     ax[1].set(title='M33 and M31 Relative Velocity', xlabel='Time (Gyr)', ylabel='Velocity (km/s)')
     ax[1].plot(t[:len(t)-1],v[:len(v)-1],label='Integration')
     ax[1].plot(merge_t,merge_vel,label='Simulation')
     ax[1].legend()
+    
+    ''''Answer HW Questions'''
+    
+    print('2: The plots start off similarly, however they diverge after ~1.5 Gyr.\n')
+    
+    print('3: The integrator is missing the Milky Way and the collission between it and \
+M31. This simulation also treats each galaxy as a point mass, but all the particles from \
+each galaxy interact.\n')
+          
+    print('4: The Milky Way could be added to this integrator, but then the forces and acceleration \
+between all 3 galaxies would need to be computed, making the integrator more \
+computationally intensive.')
+    
     
