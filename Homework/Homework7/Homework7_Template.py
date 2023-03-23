@@ -26,6 +26,7 @@ from CenterOfMass import CenterOfMass
 # **** import the GalaxyMass to determine the mass of M31 for each component
 from GalaxyMass import ComponentMass
 
+#import OrbitCom to import the vector subtraction function
 from OrbitCOM import vector_dif
 
 # # M33AnalyticOrbit
@@ -37,7 +38,15 @@ class M33AnalyticOrbit:
     """ Calculate the analytical orbit of M33 around M31 """
     
     def __init__(self,filename): # **** add inputs
-        """ **** ADD COMMENTS """
+        """ **** Class to perform a numerical integration on the orbit of
+        M33 around M31
+        
+        parameters:
+            filename: 'string'
+                name of the file that will hold the calculated positions and
+                velocities of M33
+        
+        """
 
         ### get the gravitational constant (the value is 4.498502151575286e-06)
         self.G = const.G.to(u.kpc**3/u.Msun/u.Gyr**2).value
@@ -89,7 +98,27 @@ class M33AnalyticOrbit:
     
     
     def HernquistAccel(self,M,r_a,r): # it is easiest if you take as an input the position VECTOR 
-        """ **** ADD COMMENTS """
+        """ **** function that calculates the acceletation on M33 due to M31's
+        bulge and halo, approximated by a Hernquist profile.
+        
+        inputs:
+            M: 'float'
+                mass of either M31's bulge or halo as calculated by the
+                component mass function in the GalaxyMass script in units
+                of Msun.
+                
+            r_a': 'float'
+                The scale length of either the bulge or halo of M31 in units
+                of Kpc
+                
+            r: 'array'
+                position vector of M33 relative to M31 in units of Kpc
+                
+        outputs:
+            Hern: 'array'
+                The acceleration vector of M33 due to M31's halo or bulge'
+        
+        """
         
         ### **** Store the magnitude of the position vector
         rmag = np.sqrt(r[0]**2+r[1]**2+r[2]**2)
@@ -104,7 +133,27 @@ class M33AnalyticOrbit:
     
     
     def MiyamotoNagaiAccel(self,M,r_d,r):# it is easiest if you take as an input a position VECTOR  r 
-        """ **** ADD COMMENTS """
+        """ **** function that calculates the accleration of M33 due to M31's
+        disk using the Miyamoto-Nagai 1975 profile.
+        
+        inputs:
+            M: 'float'
+                mass of either M31's disk as calculated by the
+                component mass function in the GalaxyMass script in units
+                of Msun.
+                
+            r_a': 'float'
+                The scale length of the disk of M31 in units
+                of Kpc
+                
+            r: 'array'
+                position vector of M33 relative to M31 in units of Kpc
+                
+        outputs:
+            a_MC: 'array'
+                The acceleration vector of M33 due to M31's disk'
+        
+        """
 
         
         ### Acceleration **** follow the formula in the HW instructions
@@ -127,7 +176,18 @@ class M33AnalyticOrbit:
      
     
     def M31Accel(self,COM_M31): # input should include the position vector, r
-        """ **** ADD COMMENTS """
+        """ **** Finds the total acceleration on M31 by combining the
+        bulge, halo, and disk accelerations into one vector
+        
+        inputs:
+            COM_M31: 'array'
+                vector difference between M33 and M31's position in terms of Kpc'
+                
+        outputs:
+            sum_a: 'float'
+                the total acceleration on M31
+        
+        """
 
         ### Call the previous functions for the halo, bulge and disk
         # **** these functions will take as inputs variable we defined in the initialization of the class like 
@@ -146,7 +206,31 @@ class M33AnalyticOrbit:
     
     
     def LeapFrog(self,dt,r,v): # take as input r and v, which are VECTORS. Assume it is ONE vector at a time
-        """ **** ADD COMMENTS """
+        """ **** function to integrate M33's orbit and analytically calculate
+        its orbit
+        
+        inputs:
+            dt: 'float'
+                length of time in between steps of the integration, in units
+                of Gyr
+                
+            r: 'array'
+                vector of distance between M33 and M31 in units of Kpc
+                
+            v: 'array'
+                vector of relative velocity between M33 and M31 in units of
+                km/s
+                
+        outputs:
+            rnew: 'array'
+                Vector of the new displacement between M31 and M33 after the
+                timestep
+                
+            vnew: 'array'
+                Vector of the new velocity between M31 and M33 after the
+                timestep
+        
+        """
         
         # predict the position at the next half timestep
         rhalf = r+v*dt/2
@@ -164,7 +248,23 @@ class M33AnalyticOrbit:
     
     
     def OrbitIntegration(self, t0, dt, tmax):
-        """ **** ADD COMMENTS """
+        """ **** function to perform the orbital integration of M33 by advancing
+        time and calling the LeapFrog function
+        
+        inputs:
+            t0: 'float'
+                starting time of the integration in Gyr
+                
+            dt: 'float
+            length of time in between steps of the integration, in units
+            of Gyr
+            
+            tmax: 'float'
+                End time of the integration in units of Gyr
+                
+        outputs: none
+        
+        """
 
         # initialize the time to the input starting time
         t = t0
@@ -216,8 +316,6 @@ class M33AnalyticOrbit:
         np.savetxt(self.filename, orbit, fmt = "%11.3f"*7, comments='#', 
                    header="{:>10s}{:>11s}{:>11s}{:>11s}{:>11s}{:>11s}{:>11s}"\
                    .format('t', 'x', 'y', 'z', 'vx', 'vy', 'vz'))
-        
-        return '3'
 
 if __name__ == '__main__' :
     
@@ -280,6 +378,7 @@ each galaxy interact.\n')
           
     print('4: The Milky Way could be added to this integrator, but then the forces and acceleration \
 between all 3 galaxies would need to be computed, making the integrator more \
-computationally intensive.')
+computationally intensive. This would also still neglect the merger because each galaxy \
+is treated as a point mass in this integration.')
     
     
