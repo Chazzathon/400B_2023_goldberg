@@ -1,0 +1,82 @@
+\documentclass[twocolumn]{aastex63}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{natbib}
+
+
+\begin{document}
+
+\title{ASTR 400B Research Assignment 4 \\
+Comparing the Kinematics of a Simulated Milky Way--Andromeda Merger Remnant to those of Observed Elliptical Galaxies}
+
+\author[0000-0002-4901-7693]{Charlie Goldberg}
+
+\affiliation{Steward Observatory \\
+937 N. Cherry Ave \\
+Tucson, AZ 85719, USA}
+
+\date{6 April, 2023}
+
+\keywords{Major Merger -- Elliptical Galaxy -- Velocity Dispersion -- Merger Remnant -- Rapid/Slow Rotator}
+
+\section{Introduction}
+
+When two galaxies approximately the size of the Milky Way and Andromeda collide in what is called a major merger, it is thought that an elliptical galaxy with a spherical shape and no spiral structure forms. To verify this, the kinematics of a merger remnant between a simulated Milky Way -- Andromeda major merger are studied and compared to observed elliptical galaxies.\\
+
+A galaxy is an isolated system of stars that are gravitationally bound and orbit a common center of mass, but whose motions do not appear to abide by Newton's laws of gravitation and motion. Galaxies may take the shape of spirals, ellipses, amorphous blobs, and combinations of all three. Their size and shape change in the process of galaxy evolution, but it is not known precisely how. For example, it is believed that elliptical galaxies evolve from smaller galaxies, but their formation mechanism is not fully understood. Because elliptical galaxies make up over 10\% of all known galaxies (\cite{1996MNRAS.278.1025L}) and are thought to be the byproduct of galaxy mergers, their origins are of great importance to our understanding of galaxy evolution. By simulating galaxy mergers and studying their products, the formation of elliptical galaxies can be better understood.\\
+
+It is currently known that elliptical galaxies often result from mergers between spiral galaxies (\cite{2006ApJ...650..791C}). In addition, the largest elliptical galaxies are thought to be the result of several mergers (\cite{2006ApJ...650..791C}). Observationally, elliptical galaxies appear to be dispersion supported, meaning that their components orbit in random directions as shown in Figure \ref{dispersion}. Because of this, ellipticals also have little bulk rotation as compared to spiral galaxies.\\
+
+While the general formation mechanism of elliptical galaxies is understood, it is unclear why ellipticals have little rotation (\cite{1998A&AS..133..325G}) while their progenitors do. It is also not understood why smaller elliptical galaxies rotate more than their larger counterparts (\cite{2011MNRAS.414..888E}). In addition, it is unknown why many elliptical galaxies do not appear to be dark matter dominated, despite their progenitors being heavily dominated by dark matter (\cite{2003Sci...301.1696R}). Finally, it is unclear if ellipticals form from individual mergers of large galaxies, or if they are the result of many small mergers and some major mergers.
+
+\begin{figure}
+    \centering
+    \plotone{dispersion.jpg}
+    \caption{Image of NGC 3379 showing the relative velocities of planetary nebulae within the galaxy. The motion of the nebulae toward and away from the observer appears random, indicating the galaxy has little or no rotation. Figure from \cite{2003Sci...301.1696R}.}
+    \label{dispersion}
+\end{figure}
+
+\section{Proposal}
+
+The first question this study will address is: is the Milky Way -- Andromeda merger remnant a fast or slow rotator? A slow rotator is defined as a galaxy where the average velocity of particles is significantly less than the velocity dispersion, or $\frac{V}{\sigma}<0.6$ (\cite{sparke2007galaxies}). This study will find $\frac{V}{\sigma}$ for the merger remnant using the average velocity of all of the particles and their total velocity dispersion. The second question this study will address is: how does the velocity dispersion of the merger remnant depend on orbital radius? Does it peak in the center and decrease as for observed ellipticals (\cite{10.1093/mnras/stt442}), or does the velocity distribution follow a different trend? Both questions will be answered by analyzing baryonic matter, as that is what is observable in elliptical galaxies.\\
+
+By answering these questions, we can begin to understand if mergers between galaxies such as the Milky Way and Andromeda can produce the ellipticals that are observed today.\\
+
+This study aims to analyze parameters in a simulation that are directly observable in real galaxies. As a result, this will allows us to compare the results of what we believe forms elliptical galaxies with actual galaxies. If the observables in the simulation closely match those of real elliptical galaxies, it will tell us that major mergers between large spiral galaxies can form ellipticals. If the results of the simulation do not match real elliptical galaxies, it will tell us that other mechanisms are required to form ellipticals.\\
+
+\section{Methodology}
+
+The simulation used in this study is from \cite{2012ApJ...753....8V} and simulates the Milky Way, Andromeda, M33 system from now until 11 gigayears (Gyrs) from now. It is an N-body simulation that integrates the positions and velocities of massive particles based upon the gravitational interactions from all other particles. Three particle types are used: disk, bulge, and dark matter halo particles. Finally, the simulation assumes a dry merger where there are no collisional interactions between particles, including gas drag.\\
+
+This study will analyze the final snapshot of the simulation at 11 Gyrs to ensure the merger remnant between the Milky Way and Andromeda is as close to its final state as possible. In addition, the particles will be rotated into a new reference frame such that the net angular momentum vector of the remnant is parallel with the Z axis of a new coordinate system. Additionally, the center of mass of the remnant will be placed at the origin. These transformations will simplify the analysis of the remnant. Once the transformation is done, simple plots such as the Y velocity of particles as a function of X can be plotted as shown in Figure \ref{velocity} to determine if the remnant has a net rotation. Next, the average velocity of all disk and bulge particles will be calculated and divided by the standard deviation of the velocities to determine $\frac{V}{\sigma}$. Finally, the velocity dispersion will be determined at increasing radii from the center of the remnant and plotted as a function of radius. This will be done by calculating the velocity dispersion of particles within $\pm$dr of each given radius, where dr is 0.5 Kpc.\\
+
+\begin{figure}
+    \centering
+    \plotone{velocity.png}
+    \caption{Y velocity (into the page) as a function of X for the Milky Way -- Andromeda Merger remnant. Particles at negative X values appear to move in the negative Y direction while particles at positive X values appear to move in the positive Y direction, clearly showing rotation.}
+    \label{velocity}
+\end{figure}
+
+The simulation provides the X, Y, and Z components of velocity for each particle. However, the magnitude of velocity is required to find $\frac{V}{\sigma}$, and is given by Equation \ref{velo_mag}:
+
+\begin{equation}
+    |V|=\sqrt{v_x^2 + v_y^2 + v_z^2}
+    \label{velo_mag}
+\end{equation}
+
+In addition, the velocity dispersion, $\sigma$ will be required. $\sigma$ is the standard deviation of the magnitude of velocity for all particles and is given by Equation \ref{std}:
+
+\begin{equation}
+    \sigma=\sqrt{\frac{\sum\limits_{n=1}^{N} (|v_i|-\mu)}{N}}
+    \label{std}
+\end{equation}
+
+Where $\mu$ is the average magnitude of velocity.
+
+Determining $\frac{V}{\sigma}$ will not require a plot. However, a plot of the velocity dispersion as a function of radius will be needed. This plot will then be compared to similar plots of elliptical galaxies to determine if they share the same characteristics, hence showing if a major galaxy merger can create a classical elliptical galaxy.\\
+
+Because the Milky Way and Andromeda are inclined to each other, and because the merger in the simulation is collisionless, it is expected that the majority of the stars will orbit in random directions, resulting in little or no net rotation and a $\frac{V}{\sigma}<0.6$. This is typically observed in large ellipticals similar to the merger remnant. Finally, it is predicted that that the velocity dispersion will be greatest near the center of the remnant and decrease at larger radii because there are many more particles near the core, allowing for greater variations in velocity. In addition, the particle velocities are much higher near the core, so a small percentage deviation from the mean velocity results in a larger change in velocity. A higher dispersion near the core is also observed in many ellipticals.
+
+\bibliography{references.bib}{}
+\bibliographystyle{aasjournal}
+
+\end{document}
