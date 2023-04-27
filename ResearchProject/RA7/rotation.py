@@ -32,7 +32,7 @@ rotate the remnant so that it lines up with an x,y,z coordinate system'''
 plt.rcParams.update({'font.size': 24})
 
 #initialize center of mass object
-COMD = CenterOfMass("M31MWFinalCombined.txt",2)
+COMD = CenterOfMass("merged.txt",2)
 
 #retrieve center of mass and velocity of merger remnant
 COMP = COMD.COM_P(0.1)
