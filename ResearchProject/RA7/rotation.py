@@ -5,25 +5,22 @@ Created on Tue Mar 28 09:10:23 2023
 @author: ceg30
 
 The topic of my research project is the kinematics of the merger remnant.
-This code specifically looks at the question of: does the merger remnant
+
+This code looks at the question of: does the merger remnant
 rotate. It will do this by aligning the merger remnant to an x,y,z coordinate
-system, then plotting the velocity as a function of x.
+system, then plotting the velocity as a function of x. 
+
+It also determines if the remnant is a fast or slow rotator by finding v/sigma
+and plotting this parameter as a function of r.
 """
 
 import numpy as np
-import astropy.units as u
-from astropy.constants import G
 
 # import plotting modules
-import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib.colors import LogNorm
 
 # my modules
-from ReadFile import Read
 from CenterOfMass import CenterOfMass
-from MassProfile import MassProfile
-import pandas as pd
 from BinningAlgorithm2 import bin_xy
 
 ''''First read in the position and velocity data of the merger remnant. Then
@@ -111,7 +108,7 @@ def RotateFrame(posI,velI):
 This is for my second question of: is the velocity dispersion curve typical
 of observed ellipticals?'''
 
-def velo_disp(V,R):
+def velo_disp(V,R,vn):
     '''
     Function to calculate the velocity dispersion of particles at increasing
     radii from the center of the mergr remnant
@@ -124,6 +121,9 @@ def velo_disp(V,R):
         R: numpy array
             array holding distance of each particle from the center of the
             remnant
+            
+        vn: numpy array
+            array holding the x, y, and z velocities of each particle
             
     outputs:
         r_list: list
@@ -161,10 +161,13 @@ def velo_disp(V,R):
         
         index1=list(np.where((R<(r+dr))&(R>(r-dr))))
         V_r=V[index1]
+        v_y=vn[:,1][index1]
         
         r_list.append(r)
-        dispersion_list.append(np.std(V_r))
-        velo_list.append(np.mean(V_r))
+        dispersion_list.append(np.std(v_y))
+        
+        #use circular particle velocity. In this case, that's just vy
+        velo_list.append(np.mean(abs(v_y)))
         
         r+=dr
     
@@ -199,7 +202,7 @@ def main():
     '''
     
     #retrieve radius and velocity dispersion of remnant
-    r_list,dispersion_list,velo_list=velo_disp(V,R)
+    r_list,dispersion_list,velo_list=velo_disp(V,R,vn)
     
     #initialize matplotlib plot
     fig,ax=plt.subplots(figsize=(10,10))
@@ -221,9 +224,8 @@ def main():
     ax2.set(title=name, xlabel='Radius (kpc)', ylabel='V/$\sigma$')
     
     #find the total average v/sigma for the entire remnant
-    mean_v=np.mean(V)
-    total_disp=np.std(V)
-    
+    mean_v=np.mean(abs(vn[:,1]))
+    total_disp=np.std(vn[:,1])
     
     print('Average V/sigma= '+str(np.around(mean_v/total_disp,1)))
     

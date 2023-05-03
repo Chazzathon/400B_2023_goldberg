@@ -3,11 +3,11 @@
 Created on Mon Apr 17 13:17:30 2023
 
 @author: ceg30
+
+Function to bin data and find the errors for each bin.
 """
 
-import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 
 def bin_xy(x,y,n_bins):
     '''
@@ -94,11 +94,3 @@ def bin_xy(x,y,n_bins):
     new_y=bin_array
         
     return new_x,new_y,error
-'''
-x=np.linspace(0,500,200)
-y=np.linspace(0,500,200)
-n_bins=10
-new_x,new_y,error=bin_xy(x,y,n_bins)
-print(new_x,new_y,error)
-plt.errorbar(new_x,new_y,error)
-'''
